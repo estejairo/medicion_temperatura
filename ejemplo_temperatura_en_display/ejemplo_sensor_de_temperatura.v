@@ -16,9 +16,8 @@
 module ejemplo_sensor_de_temperatura
 (
 	input CLK100MHZ,
-	input [15:0] SW,
-	inout TMP_SCL,
-	inout TMP_SDA,
+	inout TMP_SCL, //la linea debe se 'inout' para comunicarse bidireccionalmente
+	inout TMP_SDA,	//la linea debe se 'inout' para comunicarse bidireccionalmente
 	output CA, CB, CC, CD, CE, CF, CG, DP, 
 	output [7:0] AN
 );

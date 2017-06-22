@@ -1,20 +1,34 @@
 `timescale 1ns / 1ps
 
+//////////////////////////////////////////////////////////////////////////////////
+// Company: UTFSM
+// Engineer: Jairo Gonzalez
+// 
+// Create Date: 21.04.2017 18:48:11
+// Design Name: Selector
+// Module Name: selector
+// Project Name: Exp7
+// Target Devices: NEXYS4DDR
+// Description: Permite seleccionar y presionar 3 botones en pantalla mediante teclado
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
 module selector(
 	input clk, //100MHZ
+	input reset,
 	input [7:0] data,
 	input [2:0] data_type,
 	input kbs_tot,
 	output [1:0] btn_state,
-	output reg btn1_pos,
-	output reg btn2_pos,
-	output reg btn3_pos
+	output reg btn1_pressed,
+	output reg btn2_pressed,
+	output reg btn3_pressed
     );
 	
 	reg enter = 1'b0;
 	reg left = 1'b0;
 	reg right = 1'b0;
-	
+
 	wire enter_next, left_next, right_next;
 	assign enter_next = (((data == 8'h5A)&&(data_type == 3'b001))&&kbs_tot)?1'b1:1'b0;
 	assign left_next = (((data == 8'h1C)&&(data_type == 3'b001))&&kbs_tot)?1'b1:1'b0;
@@ -27,15 +41,15 @@ module selector(
 		right <= right_next;
 	end
 
-	assign btn1_pos_next = (enter&(state==SAMPLE))?1'b1:1'b0 ;
-	assign btn2_pos_next = (enter&(state==SEND))?1'b1:1'b0 ;
-	assign btn3_pos_next = (enter&(state==RESET))?1'b1:1'b0 ;
+	assign btn1_pressed_next = (enter&(state==SAMPLE))?1'b1:1'b0 ;
+	assign btn2_pressed_next = (enter&(state==SEND))?1'b1:1'b0 ;
+	assign btn3_pressed_next = (enter&(state==RESET))?1'b1:1'b0 ;
 
 	always@(posedge clk)
 	begin
-		btn1_pos <= btn1_pos_next;
-		btn2_pos <= btn2_pos_next;
-		btn3_pos <= btn3_pos_next;
+		btn1_pressed <= btn1_pressed_next;
+		btn2_pressed <= btn2_pressed_next;
+		btn3_pressed <= btn3_pressed_next;
 	end
 
 	localparam SAMPLE	= 2'b01;
@@ -55,8 +69,11 @@ module selector(
 		endcase
 	end
 
-	always @(posedge clk)
-		state <= state_next;
+	always @(posedge clk or posedge reset)
+		if (reset)
+			state <= SEND;
+		else
+			state <= state_next;
 
 
 	assign btn_state = state;
