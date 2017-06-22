@@ -1,21 +1,15 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
 // Engineer: 	Mauricio Solis
-// 
+// Modified by: Jairo Gonzalez
+//
 // Create Date: 05/21/2017 05:35:53 PM
 // Design Name: 
-// Module Name: templates
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
+// Module Name: template_20x300_500x300
+//  
+// Description: Genera una cuadrilla de 30 niveles con 10 subniveles, para 20 mediciones
 // 
-// Dependencies: 
-// 
-// Revision:
 // Revision 0.01 - File Created
-// Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -31,8 +25,6 @@ module template_20x300_500x300(clk, hc, vc, matrix_x, matrix_y, lines);
 	localparam d_col=11'b000_0001_1001;		//25
 	localparam d_row=11'd1;		//1
 	localparam d_row30=11'd10;
-	//parameter zeros_col=3'd0;
-	//parameter zeros_row=3'd0;
 	
 	reg [10:0]col=d_col   ;	
 	reg [10:0]row=d_row;
@@ -75,6 +67,7 @@ module template_20x300_500x300(clk, hc, vc, matrix_x, matrix_y, lines);
 		else
 			{row_next, matrix_y_next} = {row, matrix_y};
 
+	//Para generar lineas cada 10 niveles solamente, teniendo que 10 niveles son un grado
 	always@(*)
 		if(vc_template == 'd0)
 			row30_next = d_row30;
